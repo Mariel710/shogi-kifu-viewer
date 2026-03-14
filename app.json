@@ -2,35 +2,95 @@
   "expo": {
     "name": "棋譜ビューア",
     "slug": "shogi-kifu-viewer",
+    "description": "将棋の棋譜を読み込んで1手ずつ再生できる棋譜並べアプリ。KIF / KI2 / CSA / SFEN 形式対応。",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "scheme": "kifuviewer",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "primaryColor": "#5D4037",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#FAFAF5"
     },
+    "assetBundlePatterns": [
+      "assets/**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yourname.shogikifuviewer",
+      "buildNumber": "1",
+      "requireFullScreen": false,
+      "userInterfaceStyle": "light",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleLocalizations": ["ja", "en"],
+        "CFBundleDevelopmentRegion": "ja",
+        "NSDocumentsFolderUsageDescription": "棋譜ファイルを読み込むために使用します。",
+        "UIFileSharingEnabled": true,
+        "LSSupportsOpeningDocumentsInPlace": false
+      },
+      "privacyManifests": {
+        "NSPrivacyAccessedAPITypes": [
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+          },
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+            "NSPrivacyAccessedAPITypeReasons": ["C617.1"]
+          },
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryDiskSpace",
+            "NSPrivacyAccessedAPITypeReasons": ["85F4.1"]
+          }
+        ],
+        "NSPrivacyCollectedDataTypes": [],
+        "NSPrivacyTracking": false
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#DEB887"
+        "backgroundColor": "#5D4037"
       },
-      "package": "com.yourname.shogikifuviewer"
+      "package": "com.yourname.shogikifuviewer",
+      "versionCode": 1,
+      "userInterfaceStyle": "light",
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.VIBRATE"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            { "scheme": "kifuviewer" }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        },
+        {
+          "action": "VIEW",
+          "data": [
+            { "mimeType": "application/octet-stream" },
+            { "mimeType": "text/plain" }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "bundler": "metro",
       "output": "single",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "name": "棋譜ビューア",
+      "shortName": "棋譜",
+      "lang": "ja",
+      "themeColor": "#5D4037",
+      "backgroundColor": "#FAFAF5",
+      "description": "将棋の棋譜並べアプリ"
     },
     "plugins": [
       "expo-router",
