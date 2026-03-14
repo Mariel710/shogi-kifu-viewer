@@ -1,4 +1,4 @@
-import type { BoardState, Piece } from './types';
+import type { BoardState, HandPieces, Piece, PieceType } from './types';
 
 // Create an empty 9x9 board
 export function createEmptyBoard(): BoardState {
@@ -48,4 +48,45 @@ export function createInitialBoard(): BoardState {
   board[8] = senteBackRow;
 
   return board;
+}
+
+/**
+ * Convert JKF state board (board[x-1][y-1], col-major, x=file 1-9) to our
+ * board (board[row][col], row=rank-1, col=9-file).
+ *
+ * Mapping: my board[row][col] = jkfBoard[8-col][row]
+ *   because col=9-x → x-1=8-col
+ */
+export function jkfBoardToMyBoard(
+  jkfBoard: Array<Array<{ color?: number; kind?: string }>>
+): BoardState {
+  const board = createEmptyBoard();
+  for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 9; col++) {
+      const p = jkfBoard[8 - col]?.[row];
+      if (p && p.kind !== undefined && p.color !== undefined) {
+        board[row][col] = {
+          type: p.kind as PieceType,
+          player: p.color === 0 ? 'sente' : 'gote',
+        };
+      }
+    }
+  }
+  return board;
+}
+
+/**
+ * Convert JKF hand format {FU:n, KY:n, ...} to our HandPieces type.
+ * Zero-count entries are omitted.
+ */
+export function jkfHandToMyHand(
+  jkfHand: Partial<Record<string, number>>
+): HandPieces {
+  const hand: HandPieces = {};
+  for (const [key, count] of Object.entries(jkfHand)) {
+    if (count && count > 0) {
+      hand[key as PieceType] = count;
+    }
+  }
+  return hand;
 }

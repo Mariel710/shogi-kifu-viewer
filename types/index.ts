@@ -4,4 +4,9 @@ export type { PieceType, Player, Piece, BoardState, HandPieces, GameState, Move 
 export type { KifuFormat } from '../lib/parser/detectFormat';
 export type { KifuRecord } from '../lib/storage/kifuDB';
 export type { ScreenLayout, ScreenLayoutInfo } from '../hooks/useScreenLayout';
-export type { LastMove, KifuPlayerState, KifuPlayerControls } from '../hooks/useKifuPlayer';
+export type {
+  LastMove,
+  GameMeta,
+  KifuPlayerState,
+  KifuPlayerControls,
+} from '../hooks/useKifuPlayer';
