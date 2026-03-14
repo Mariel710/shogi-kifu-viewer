@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -7,7 +8,9 @@ import Hand from '@/components/board/Hand';
 import PlayerControls from '@/components/controls/PlayerControls';
 import KifuList from '@/components/kifu/KifuList';
 import BranchIndicator from '@/components/kifu/BranchIndicator';
-import { useKifuPlayer } from '@/hooks/useKifuPlayer';
+import GameInfoBar from '@/components/header/GameInfoBar';
+import CommentView from '@/components/kifu/CommentView';
+import { useKifuPlayerContext } from '@/contexts/KifuPlayerContext';
 import { useScreenLayout } from '@/hooks/useScreenLayout';
 import { useSwipeGesture } from '@/hooks/useSwipeGesture';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -26,14 +29,17 @@ export default function MainScreen() {
     isLoaded,
     kifuList,
     branchMoves,
+    comments,
+    meta,
     goForward,
     goBack,
     goToStart,
     goToEnd,
     goTo,
     forkAndForward,
-  } = useKifuPlayer();
+  } = useKifuPlayerContext();
   const { layout, boardSize } = useScreenLayout();
+  const [reversed, setReversed] = useState(false);
 
   const swipeGesture = useSwipeGesture(goForward, goBack);
   useKeyboardShortcuts({
@@ -64,6 +70,15 @@ export default function MainScreen() {
     </TouchableOpacity>
   );
 
+  const flipBtn = (
+    <TouchableOpacity
+      style={[styles.flipBtn, reversed && styles.flipBtnActive]}
+      onPress={() => setReversed((v) => !v)}
+    >
+      <Text style={[styles.flipBtnText, reversed && styles.flipBtnTextActive]}>後手視点</Text>
+    </TouchableOpacity>
+  );
+
   const kifuSection = (
     <>
       <BranchIndicator branches={branchMoves} onSelectBranch={forkAndForward} />
@@ -71,22 +86,33 @@ export default function MainScreen() {
     </>
   );
 
+  const boardArea = (
+    <>
+      <Hand player={reversed ? 'sente' : 'gote'} pieces={gotePieces} pieceSize={boardSize / 9} />
+      <GestureDetector gesture={swipeGesture}>
+        <View>
+          <ShogiBoard board={board} size={boardSize} lastMove={lastMove} reversed={reversed} />
+        </View>
+      </GestureDetector>
+      <Hand player={reversed ? 'gote' : 'sente'} pieces={sentePieces} pieceSize={boardSize / 9} />
+    </>
+  );
+
   if (isLandscape) {
     return (
       <SafeAreaView style={styles.safeArea} edges={['bottom', 'left', 'right']}>
+        <GameInfoBar meta={meta} isLoaded={isLoaded} />
         <View style={styles.landscapeContainer}>
           {/* Left: hands + board + controls */}
           <View style={styles.landscapeBoardArea}>
-            <Hand player="gote" pieces={gotePieces} pieceSize={boardSize / 9} />
-            <GestureDetector gesture={swipeGesture}>
-              <View>
-                <ShogiBoard board={board} size={boardSize} lastMove={lastMove} />
-              </View>
-            </GestureDetector>
-            <Hand player="sente" pieces={sentePieces} pieceSize={boardSize / 9} />
+            {boardArea}
             <MoveDescription text={moveDescription} />
             {controls}
-            <View style={styles.importRow}>{importBtn}</View>
+            <View style={styles.actionRow}>
+              {importBtn}
+              {flipBtn}
+            </View>
+            <CommentView comments={comments} />
           </View>
           {/* Right: kifu list */}
           <View style={styles.landscapeSide}>
@@ -100,21 +126,20 @@ export default function MainScreen() {
   // Portrait layout
   return (
     <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+      <GameInfoBar meta={meta} isLoaded={isLoaded} />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.portraitContent}
         showsVerticalScrollIndicator={false}
       >
-        <Hand player="gote" pieces={gotePieces} pieceSize={boardSize / 9} />
-        <GestureDetector gesture={swipeGesture}>
-          <View>
-            <ShogiBoard board={board} size={boardSize} lastMove={lastMove} />
-          </View>
-        </GestureDetector>
-        <Hand player="sente" pieces={sentePieces} pieceSize={boardSize / 9} />
+        {boardArea}
         <MoveDescription text={moveDescription} />
         {controls}
-        <View style={styles.importRow}>{importBtn}</View>
+        <View style={styles.actionRow}>
+          {importBtn}
+          {flipBtn}
+        </View>
+        <CommentView comments={comments} />
         {kifuSection}
       </ScrollView>
     </SafeAreaView>
@@ -168,13 +193,16 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
   },
-  importRow: {
+  actionRow: {
+    flexDirection: 'row',
     alignSelf: 'stretch',
     paddingHorizontal: 8,
     paddingTop: 6,
     paddingBottom: 4,
+    gap: 8,
   },
   importBtn: {
+    flex: 1,
     height: 40,
     backgroundColor: '#8B6914',
     borderRadius: 8,
@@ -185,5 +213,25 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: '600',
+  },
+  flipBtn: {
+    height: 40,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  flipBtnActive: {
+    backgroundColor: COLORS.primary,
+  },
+  flipBtnText: {
+    fontSize: 13,
+    color: COLORS.primary,
+    fontWeight: '600',
+  },
+  flipBtnTextActive: {
+    color: '#fff',
   },
 });

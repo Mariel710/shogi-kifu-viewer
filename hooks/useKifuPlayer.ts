@@ -31,6 +31,7 @@ export interface KifuPlayerState {
   moveDescription: string; // e.g. "32手目 ☗７六歩"
   kifuList: KifuListItem[];   // full move list for display
   branchMoves: string[];      // fork descriptions at current position
+  comments: string[];         // comments for the current move
   meta: GameMeta;
   isLoaded: boolean;
   parseError: string | null;
@@ -91,6 +92,9 @@ function buildStateFromPlayer(player: JKFPlayer): Omit<KifuPlayerState, 'parseEr
   // Branch moves at the current position (empty if no forks)
   const branchMoves: string[] = readableStates[tesuu]?.forks ?? [];
 
+  // Comments for the current move
+  const comments: string[] = player.getComments(tesuu);
+
   // Last move highlight (from the move that was just made, if any)
   let lastMove: LastMove | undefined;
   if (tesuu > 0) {
@@ -118,6 +122,7 @@ function buildStateFromPlayer(player: JKFPlayer): Omit<KifuPlayerState, 'parseEr
     moveDescription,
     kifuList,
     branchMoves,
+    comments,
     meta,
     isLoaded: true,
   };
@@ -136,6 +141,7 @@ export function useKifuPlayer(): KifuPlayerState & KifuPlayerControls {
     moveDescription: '開始局面',
     kifuList: [],
     branchMoves: [],
+    comments: [],
     meta: INITIAL_META,
     isLoaded: false,
     parseError: null,

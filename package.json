@@ -46,7 +46,17 @@
     "typescript": "~5.8.3"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "projects": [
+      {
+        "displayName": "unit",
+        "testMatch": ["<rootDir>/__tests__/**/*.test.ts"],
+        "testEnvironment": "node",
+        "transform": {
+          "^.+\\.tsx?$": ["babel-jest", {"configFile": false, "presets": [["babel-preset-expo", {"jsxImportSource": "react"}]]}]
+        }
+      }
+    ]
   },
   "private": true
 }
