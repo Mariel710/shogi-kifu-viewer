@@ -5,6 +5,8 @@ import { GestureDetector } from 'react-native-gesture-handler';
 import ShogiBoard from '@/components/board/ShogiBoard';
 import Hand from '@/components/board/Hand';
 import PlayerControls from '@/components/controls/PlayerControls';
+import KifuList from '@/components/kifu/KifuList';
+import BranchIndicator from '@/components/kifu/BranchIndicator';
 import { useKifuPlayer } from '@/hooks/useKifuPlayer';
 import { useScreenLayout } from '@/hooks/useScreenLayout';
 import { useSwipeGesture } from '@/hooks/useSwipeGesture';
@@ -22,11 +24,14 @@ export default function MainScreen() {
     totalMoves,
     lastMove,
     isLoaded,
+    kifuList,
+    branchMoves,
     goForward,
     goBack,
     goToStart,
     goToEnd,
     goTo,
+    forkAndForward,
   } = useKifuPlayer();
   const { layout, boardSize } = useScreenLayout();
 
@@ -59,6 +64,13 @@ export default function MainScreen() {
     </TouchableOpacity>
   );
 
+  const kifuSection = (
+    <>
+      <BranchIndicator branches={branchMoves} onSelectBranch={forkAndForward} />
+      <KifuList moves={kifuList} currentMove={currentMove} onGoTo={goTo} />
+    </>
+  );
+
   if (isLandscape) {
     return (
       <SafeAreaView style={styles.safeArea} edges={['bottom', 'left', 'right']}>
@@ -76,10 +88,9 @@ export default function MainScreen() {
             {controls}
             <View style={styles.importRow}>{importBtn}</View>
           </View>
-          {/* Right: kifu list placeholder */}
+          {/* Right: kifu list */}
           <View style={styles.landscapeSide}>
-            <Text style={styles.sideTitle}>棋譜リスト</Text>
-            <Text style={styles.sidePlaceholder}>Phase 5で実装</Text>
+            {kifuSection}
           </View>
         </View>
       </SafeAreaView>
@@ -104,11 +115,7 @@ export default function MainScreen() {
         <MoveDescription text={moveDescription} />
         {controls}
         <View style={styles.importRow}>{importBtn}</View>
-        {/* Kifu list placeholder */}
-        <View style={styles.kifuPlaceholder}>
-          <Text style={styles.sideTitle}>棋譜リスト</Text>
-          <Text style={styles.sidePlaceholder}>Phase 5で実装</Text>
-        </View>
+        {kifuSection}
       </ScrollView>
     </SafeAreaView>
   );
@@ -145,9 +152,9 @@ const styles = StyleSheet.create({
   },
   landscapeSide: {
     flex: 1,
-    padding: 12,
     borderLeftWidth: 1,
     borderLeftColor: COLORS.boardLine,
+    overflow: 'hidden',
   },
   moveDescRow: {
     paddingVertical: 6,
@@ -165,6 +172,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     paddingHorizontal: 8,
     paddingTop: 6,
+    paddingBottom: 4,
   },
   importBtn: {
     height: 40,
@@ -177,22 +185,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: '600',
-  },
-  kifuPlaceholder: {
-    alignSelf: 'stretch',
-    padding: 16,
-    marginTop: 8,
-    backgroundColor: '#F5F0E8',
-    minHeight: 120,
-  },
-  sideTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.textMain,
-    marginBottom: 4,
-  },
-  sidePlaceholder: {
-    fontSize: 13,
-    color: '#999',
   },
 });

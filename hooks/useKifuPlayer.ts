@@ -16,6 +16,11 @@ export interface GameMeta {
   date: string;
 }
 
+export interface KifuListItem {
+  move: number;
+  description: string;
+}
+
 export interface KifuPlayerState {
   board: BoardState;
   sentePieces: HandPieces;
@@ -24,6 +29,8 @@ export interface KifuPlayerState {
   totalMoves: number;
   lastMove?: LastMove;
   moveDescription: string; // e.g. "32手目 ☗７六歩"
+  kifuList: KifuListItem[];   // full move list for display
+  branchMoves: string[];      // fork descriptions at current position
   meta: GameMeta;
   isLoaded: boolean;
   parseError: string | null;
@@ -35,6 +42,7 @@ export interface KifuPlayerControls {
   goToStart: () => void;
   goToEnd: () => void;
   goTo: (move: number) => void;
+  forkAndForward: (forkIndex: number) => void;
   loadKifu: (text: string, filename?: string) => void;
 }
 
@@ -68,10 +76,20 @@ function buildStateFromPlayer(player: JKFPlayer): Omit<KifuPlayerState, 'parseEr
   const tesuu = player.tesuu;
   const totalMoves = player.getMaxTesuu();
 
-  // Move description
+  // Move description for current position
   const readableKifu = player.getReadableKifu();
   const moveDescription =
     tesuu === 0 ? '開始局面' : `${tesuu}手目 ${readableKifu}`;
+
+  // Full kifu list from the current stream
+  const readableStates = player.getReadableKifuState();
+  const kifuList: KifuListItem[] = readableStates.map((s, i) => ({
+    move: i,
+    description: i === 0 ? '開始局面' : `${i} ${s.kifu}`,
+  }));
+
+  // Branch moves at the current position (empty if no forks)
+  const branchMoves: string[] = readableStates[tesuu]?.forks ?? [];
 
   // Last move highlight (from the move that was just made, if any)
   let lastMove: LastMove | undefined;
@@ -98,6 +116,8 @@ function buildStateFromPlayer(player: JKFPlayer): Omit<KifuPlayerState, 'parseEr
     totalMoves,
     lastMove,
     moveDescription,
+    kifuList,
+    branchMoves,
     meta,
     isLoaded: true,
   };
@@ -114,6 +134,8 @@ export function useKifuPlayer(): KifuPlayerState & KifuPlayerControls {
     totalMoves: 0,
     lastMove: undefined,
     moveDescription: '開始局面',
+    kifuList: [],
+    branchMoves: [],
     meta: INITIAL_META,
     isLoaded: false,
     parseError: null,
@@ -167,6 +189,16 @@ export function useKifuPlayer(): KifuPlayerState & KifuPlayerControls {
     [syncState]
   );
 
+  const forkAndForward = useCallback(
+    (forkIndex: number) => {
+      const p = playerRef.current;
+      if (!p) return;
+      p.forkAndForward(forkIndex);
+      syncState();
+    },
+    [syncState]
+  );
+
   const loadKifu = useCallback(
     (text: string, filename?: string) => {
       try {
@@ -194,6 +226,7 @@ export function useKifuPlayer(): KifuPlayerState & KifuPlayerControls {
     goToStart,
     goToEnd,
     goTo,
+    forkAndForward,
     loadKifu,
   };
 }
