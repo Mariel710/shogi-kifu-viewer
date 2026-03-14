@@ -36,6 +36,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.0",
     "@testing-library/react-native": "^12.5.0",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.0.10",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~9.2.0",
@@ -50,10 +51,54 @@
     "projects": [
       {
         "displayName": "unit",
-        "testMatch": ["<rootDir>/__tests__/**/*.test.ts"],
+        "testMatch": [
+          "<rootDir>/__tests__/**/*.test.ts"
+        ],
         "testEnvironment": "node",
+        "moduleNameMapper": {
+          "^@/(.*)$": "<rootDir>/$1"
+        },
         "transform": {
-          "^.+\\.tsx?$": ["babel-jest", {"configFile": false, "presets": [["babel-preset-expo", {"jsxImportSource": "react"}]]}]
+          "^.+\\.tsx?$": [
+            "babel-jest",
+            {
+              "configFile": false,
+              "presets": [
+                [
+                  "babel-preset-expo",
+                  {
+                    "jsxImportSource": "react"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "displayName": "components",
+        "testMatch": [
+          "<rootDir>/__tests__/**/*.test.tsx"
+        ],
+        "testEnvironment": "node",
+        "moduleNameMapper": {
+          "^@/(.*)$": "<rootDir>/$1"
+        },
+        "transform": {
+          "^.+\\.tsx?$": [
+            "babel-jest",
+            {
+              "configFile": false,
+              "presets": [
+                [
+                  "babel-preset-expo",
+                  {
+                    "jsxImportSource": "react"
+                  }
+                ]
+              ]
+            }
+          ]
         }
       }
     ]
