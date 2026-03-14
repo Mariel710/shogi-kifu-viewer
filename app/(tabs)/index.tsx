@@ -10,6 +10,7 @@ import KifuList from '@/components/kifu/KifuList';
 import BranchIndicator from '@/components/kifu/BranchIndicator';
 import GameInfoBar from '@/components/header/GameInfoBar';
 import CommentView from '@/components/kifu/CommentView';
+import ShareButton from '@/components/share/ShareButton';
 import { useKifuPlayerContext } from '@/contexts/KifuPlayerContext';
 import { useScreenLayout } from '@/hooks/useScreenLayout';
 import { useSwipeGesture } from '@/hooks/useSwipeGesture';
@@ -37,6 +38,7 @@ export default function MainScreen() {
     goToEnd,
     goTo,
     forkAndForward,
+    getJkfJson,
   } = useKifuPlayerContext();
   const { layout, boardSize } = useScreenLayout();
   const [reversed, setReversed] = useState(false);
@@ -68,6 +70,10 @@ export default function MainScreen() {
     <TouchableOpacity style={styles.importBtn} onPress={() => router.push('/import')}>
       <Text style={styles.importBtnText}>棋譜を読む</Text>
     </TouchableOpacity>
+  );
+
+  const shareBtn = (
+    <ShareButton getJkfJson={getJkfJson} title="棋譜" disabled={!isLoaded} />
   );
 
   const flipBtn = (
@@ -111,6 +117,7 @@ export default function MainScreen() {
             <View style={styles.actionRow}>
               {importBtn}
               {flipBtn}
+              {shareBtn}
             </View>
             <CommentView comments={comments} />
           </View>

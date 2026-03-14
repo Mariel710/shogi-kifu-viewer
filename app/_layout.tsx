@@ -18,6 +18,10 @@ export default function RootLayout() {
                 title: '棋譜を読み込む',
               }}
             />
+            <Stack.Screen
+              name="kifu"
+              options={{ headerShown: false }}
+            />
           </Stack>
         </KifuPlayerProvider>
       </SafeAreaProvider>

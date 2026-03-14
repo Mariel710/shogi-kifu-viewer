@@ -1,27 +1,35 @@
 import { TouchableOpacity, Text, StyleSheet, Platform, Share } from 'react-native';
+import * as Linking from 'expo-linking';
 import { COLORS } from '@/lib/shogi/constants';
+import { buildShareUrl } from '@/lib/share/urlEncoder';
 
 interface ShareButtonProps {
-  jkfData: string;
+  getJkfJson: () => string | null;
   title?: string;
   disabled?: boolean;
 }
 
-export default function ShareButton({ jkfData, title, disabled }: ShareButtonProps) {
+export default function ShareButton({ getJkfJson, title, disabled }: ShareButtonProps) {
   const handleShare = async () => {
     try {
+      const jkfJson = getJkfJson();
+      if (!jkfJson) return;
+
+      const baseUrl = Linking.createURL('kifu');
+      const url = buildShareUrl(baseUrl, jkfJson);
+
       if (Platform.OS === 'web') {
         if (navigator.share) {
-          await navigator.share({ title: title ?? '棋譜', text: jkfData });
+          await navigator.share({ title: title ?? '棋譜', url });
         } else {
-          await navigator.clipboard.writeText(jkfData);
+          await navigator.clipboard.writeText(url);
         }
         return;
       }
 
       await Share.share({
         title: title ?? '棋譜',
-        message: jkfData,
+        message: url,
       });
     } catch {
       // User cancelled or share not supported — ignore

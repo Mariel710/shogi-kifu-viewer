@@ -45,6 +45,7 @@ export interface KifuPlayerControls {
   goTo: (move: number) => void;
   forkAndForward: (forkIndex: number) => void;
   loadKifu: (text: string, filename?: string) => void;
+  getJkfJson: () => string | null;
 }
 
 const INITIAL_META: GameMeta = { sente: '', gote: '', event: '', date: '' };
@@ -225,6 +226,12 @@ export function useKifuPlayer(): KifuPlayerState & KifuPlayerControls {
     []
   );
 
+  const getJkfJson = useCallback((): string | null => {
+    const p = playerRef.current;
+    if (!p) return null;
+    return JSON.stringify(p.kifu);
+  }, []);
+
   return {
     ...state,
     goForward,
@@ -234,5 +241,6 @@ export function useKifuPlayer(): KifuPlayerState & KifuPlayerControls {
     goTo,
     forkAndForward,
     loadKifu,
+    getJkfJson,
   };
 }
