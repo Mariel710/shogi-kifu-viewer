@@ -1,10 +1,14 @@
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { GestureDetector } from 'react-native-gesture-handler';
 import ShogiBoard from '@/components/board/ShogiBoard';
 import Hand from '@/components/board/Hand';
+import PlayerControls from '@/components/controls/PlayerControls';
 import { useKifuPlayer } from '@/hooks/useKifuPlayer';
 import { useScreenLayout } from '@/hooks/useScreenLayout';
+import { useSwipeGesture } from '@/hooks/useSwipeGesture';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { COLORS } from '@/lib/shogi/constants';
 
 export default function MainScreen() {
@@ -14,32 +18,63 @@ export default function MainScreen() {
     sentePieces,
     gotePieces,
     moveDescription,
+    currentMove,
+    totalMoves,
+    lastMove,
+    isLoaded,
     goForward,
     goBack,
     goToStart,
     goToEnd,
+    goTo,
   } = useKifuPlayer();
   const { layout, boardSize } = useScreenLayout();
 
+  const swipeGesture = useSwipeGesture(goForward, goBack);
+  useKeyboardShortcuts({
+    onForward: goForward,
+    onBack: goBack,
+    onStart: goToStart,
+    onEnd: goToEnd,
+  });
+
   const isLandscape = layout === 'landscape' || layout === 'tablet';
+
+  const controls = (
+    <PlayerControls
+      currentMove={currentMove}
+      totalMoves={totalMoves}
+      onStart={goToStart}
+      onBack={goBack}
+      onForward={goForward}
+      onEnd={goToEnd}
+      onGoTo={goTo}
+      isLoaded={isLoaded}
+    />
+  );
+
+  const importBtn = (
+    <TouchableOpacity style={styles.importBtn} onPress={() => router.push('/import')}>
+      <Text style={styles.importBtnText}>棋譜を読む</Text>
+    </TouchableOpacity>
+  );
 
   if (isLandscape) {
     return (
       <SafeAreaView style={styles.safeArea} edges={['bottom', 'left', 'right']}>
         <View style={styles.landscapeContainer}>
-          {/* Left: hands + board */}
+          {/* Left: hands + board + controls */}
           <View style={styles.landscapeBoardArea}>
             <Hand player="gote" pieces={gotePieces} pieceSize={boardSize / 9} />
-            <ShogiBoard board={board} size={boardSize} />
+            <GestureDetector gesture={swipeGesture}>
+              <View>
+                <ShogiBoard board={board} size={boardSize} lastMove={lastMove} />
+              </View>
+            </GestureDetector>
             <Hand player="sente" pieces={sentePieces} pieceSize={boardSize / 9} />
             <MoveDescription text={moveDescription} />
-            <Controls
-              onStart={goToStart}
-              onBack={goBack}
-              onForward={goForward}
-              onEnd={goToEnd}
-              onImport={() => router.push('/import')}
-            />
+            {controls}
+            <View style={styles.importRow}>{importBtn}</View>
           </View>
           {/* Right: kifu list placeholder */}
           <View style={styles.landscapeSide}>
@@ -60,16 +95,15 @@ export default function MainScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Hand player="gote" pieces={gotePieces} pieceSize={boardSize / 9} />
-        <ShogiBoard board={board} size={boardSize} />
+        <GestureDetector gesture={swipeGesture}>
+          <View>
+            <ShogiBoard board={board} size={boardSize} lastMove={lastMove} />
+          </View>
+        </GestureDetector>
         <Hand player="sente" pieces={sentePieces} pieceSize={boardSize / 9} />
         <MoveDescription text={moveDescription} />
-        <Controls
-          onStart={goToStart}
-          onBack={goBack}
-          onForward={goForward}
-          onEnd={goToEnd}
-          onImport={() => router.push('/import')}
-        />
+        {controls}
+        <View style={styles.importRow}>{importBtn}</View>
         {/* Kifu list placeholder */}
         <View style={styles.kifuPlaceholder}>
           <Text style={styles.sideTitle}>棋譜リスト</Text>
@@ -85,36 +119,6 @@ function MoveDescription({ text }: { text: string }) {
     <View style={styles.moveDescRow}>
       <Text style={styles.moveDescText}>{text}</Text>
     </View>
-  );
-}
-
-interface ControlsProps {
-  onStart: () => void;
-  onBack: () => void;
-  onForward: () => void;
-  onEnd: () => void;
-  onImport: () => void;
-}
-
-function Controls({ onStart, onBack, onForward, onEnd, onImport }: ControlsProps) {
-  return (
-    <View style={styles.controlRow}>
-      <CtrlBtn label="|◁" onPress={onStart} />
-      <CtrlBtn label="◁" onPress={onBack} />
-      <CtrlBtn label="▷" onPress={onForward} />
-      <CtrlBtn label="▷|" onPress={onEnd} />
-      <TouchableOpacity style={styles.importBtn} onPress={onImport}>
-        <Text style={styles.importBtnText}>棋譜を読む</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-function CtrlBtn({ label, onPress }: { label: string; onPress: () => void }) {
-  return (
-    <TouchableOpacity style={styles.ctrlBtn} onPress={onPress} activeOpacity={0.7}>
-      <Text style={styles.ctrlBtnText}>{label}</Text>
-    </TouchableOpacity>
   );
 }
 
@@ -157,30 +161,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
   },
-  controlRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    gap: 6,
-    backgroundColor: COLORS.bgMain,
-  },
-  ctrlBtn: {
-    width: 52,
-    height: 44,
-    backgroundColor: COLORS.primary,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  ctrlBtnText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
+  importRow: {
+    alignSelf: 'stretch',
+    paddingHorizontal: 8,
+    paddingTop: 6,
   },
   importBtn: {
-    flex: 1,
-    height: 44,
+    height: 40,
     backgroundColor: '#8B6914',
     borderRadius: 8,
     alignItems: 'center',
