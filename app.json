@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "棋譜ビューア",
+    "slug": "shogi-kifu-viewer",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "scheme": "kifuviewer",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FAFAF5"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourname.shogikifuviewer",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#DEB887"
+      },
+      "package": "com.yourname.shogikifuviewer"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-haptics",
+      "expo-document-picker"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
