@@ -54,3 +54,11 @@ iOS / Android / Web の3プラットフォーム対応。
 - ジェスチャー操作は react-native-gesture-handler を使用
 - 触覚フィードバックは expo-haptics を使用
 - NativeWind v4 は react-native-reanimated v3 と組み合わせること（v4 は非対応）
+
+## セキュリティ規約
+- ユーザー入力は必ずサニタイズしてから使用（特にSQLiteクエリ・URL）
+- `eval()` および `dangerouslySetInnerHTML` は使用禁止
+- SQLiteクエリはプリペアドステートメントを使用（例: `db.runAsync('... WHERE id = ?', [id])`）
+- APIキーやシークレットをコードにハードコードしない（環境変数または EAS Secrets を使用）
+- 外部URLへのfetchはホワイトリスト方式（許可ドメインを定数として管理）
+- 実装完了時は必ず `npm run lint` と `npx tsc --noEmit` を実行してからコミット

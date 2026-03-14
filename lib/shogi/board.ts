@@ -58,7 +58,7 @@ export function createInitialBoard(): BoardState {
  *   because col=9-x → x-1=8-col
  */
 export function jkfBoardToMyBoard(
-  jkfBoard: Array<Array<{ color?: number; kind?: string }>>
+  jkfBoard: { color?: number; kind?: string }[][]
 ): BoardState {
   const board = createEmptyBoard();
   for (let row = 0; row < 9; row++) {

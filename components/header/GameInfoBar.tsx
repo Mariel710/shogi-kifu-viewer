@@ -1,9 +1,6 @@
 import { View } from 'react-native';
 
-interface GameInfoBarProps {
-  // TODO: Phase 7 - add game info bar props
-}
-
-export default function GameInfoBar(_props: GameInfoBarProps) {
+// TODO: Phase 7 - implement GameInfoBar
+export default function GameInfoBar() {
   return <View />;
 }

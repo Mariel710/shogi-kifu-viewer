@@ -1,9 +1,6 @@
 import { View } from 'react-native';
 
-interface KifuCardProps {
-  // TODO: Phase 9 - add kifu card props
-}
-
-export default function KifuCard(_props: KifuCardProps) {
+// TODO: Phase 9 - implement KifuCard
+export default function KifuCard() {
   return <View />;
 }

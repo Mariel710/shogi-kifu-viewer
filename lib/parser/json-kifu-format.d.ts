@@ -108,7 +108,7 @@ declare module 'json-kifu-format' {
     shogi: Shogi;
     kifu: IJSONKifuFormat;
     tesuu: number;
-    forkPointers: Array<{ te: number; forkIndex: number }>;
+    forkPointers: { te: number; forkIndex: number }[];
     readonly currentStream: IMoveFormat[];
 
     initialize(kifu: IJSONKifuFormat): void;
@@ -130,8 +130,8 @@ declare module 'json-kifu-format' {
 
   // ── Shogi class (re-exported from shogi.js) ────────────────────────────────
   class Shogi {
-    board: Array<Array<{ color: Color; kind: Kind } | null>>;
-    hands: Array<Array<{ color: Color; kind: Kind }>>;
+    board: ({ color: Color; kind: Kind } | null)[][];
+    hands: { color: Color; kind: Kind }[][];
     turn: Color;
     flagEditMode: boolean;
 

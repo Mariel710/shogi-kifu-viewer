@@ -55,7 +55,7 @@ function buildStateFromPlayer(player: JKFPlayer): Omit<KifuPlayerState, 'parseEr
   const state = player.getState();
 
   const board = jkfBoardToMyBoard(
-    state.board as Array<Array<{ color?: number; kind?: string }>>
+    state.board as { color?: number; kind?: string }[][]
   );
 
   const sentePieces = jkfHandToMyHand(

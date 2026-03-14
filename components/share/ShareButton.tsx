@@ -1,9 +1,6 @@
 import { View } from 'react-native';
 
-interface ShareButtonProps {
-  // TODO: Phase 10 - add share button props
-}
-
-export default function ShareButton(_props: ShareButtonProps) {
+// TODO: Phase 10 - implement ShareButton
+export default function ShareButton() {
   return <View />;
 }

@@ -1,9 +1,6 @@
 import { View } from 'react-native';
 
-interface LibraryListProps {
-  // TODO: Phase 9 - add library list props
-}
-
-export default function LibraryList(_props: LibraryListProps) {
+// TODO: Phase 9 - implement LibraryList
+export default function LibraryList() {
   return <View />;
 }

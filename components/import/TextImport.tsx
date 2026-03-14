@@ -1,9 +1,6 @@
 import { View } from 'react-native';
 
-interface TextImportProps {
-  // TODO: Phase 6 - add text import props
-}
-
-export default function TextImport(_props: TextImportProps) {
+// TODO: Phase 6 - implement TextImport
+export default function TextImport() {
   return <View />;
 }
