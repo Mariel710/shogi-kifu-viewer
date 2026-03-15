@@ -95,7 +95,6 @@
     "plugins": [
       "expo-router",
       "expo-sqlite",
-      "expo-haptics",
       "expo-document-picker"
     ],
     "experiments": {
