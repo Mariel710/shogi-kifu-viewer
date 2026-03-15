@@ -26,7 +26,10 @@
       "userInterfaceStyle": "light",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "CFBundleLocalizations": ["ja", "en"],
+        "CFBundleLocalizations": [
+          "ja",
+          "en"
+        ],
         "CFBundleDevelopmentRegion": "ja",
         "NSDocumentsFolderUsageDescription": "棋譜ファイルを読み込むために使用します。",
         "UIFileSharingEnabled": true,
@@ -36,15 +39,21 @@
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
-            "NSPrivacyAccessedAPITypeReasons": ["C617.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "C617.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryDiskSpace",
-            "NSPrivacyAccessedAPITypeReasons": ["85F4.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "85F4.1"
+            ]
           }
         ],
         "NSPrivacyCollectedDataTypes": [],
@@ -67,17 +76,29 @@
         {
           "action": "VIEW",
           "data": [
-            { "scheme": "kifuviewer" }
+            {
+              "scheme": "kifuviewer"
+            }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         },
         {
           "action": "VIEW",
           "data": [
-            { "mimeType": "application/octet-stream" },
-            { "mimeType": "text/plain" }
+            {
+              "mimeType": "application/octet-stream"
+            },
+            {
+              "mimeType": "text/plain"
+            }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -99,6 +120,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b3aecc8d-deaa-48b0-8540-508452fd069d"
+      }
     }
   }
 }
