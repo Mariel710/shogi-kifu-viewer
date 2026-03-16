@@ -19,6 +19,10 @@ web-build/
 .yarn/install-state.gz
 .pnp.*
 
+# Native directories (managed by EAS CNG, do not commit)
+/android
+/ios
+
 # Store credentials (never commit)
 google-play-key.json
 AuthKey_*.p8
