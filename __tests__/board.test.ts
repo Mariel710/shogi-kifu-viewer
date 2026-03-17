@@ -37,14 +37,14 @@ describe('createInitialBoard', () => {
     }
   });
 
-  it('places sente HI at row 7, col 1', () => {
+  it('places sente KA (bishop) at row 7, col 1 (8八)', () => {
     const board = createInitialBoard();
-    expect(board[7][1]).toEqual({ type: 'HI', player: 'sente' });
+    expect(board[7][1]).toEqual({ type: 'KA', player: 'sente' });
   });
 
-  it('places sente KA at row 7, col 7', () => {
+  it('places sente HI (rook) at row 7, col 7 (2八)', () => {
     const board = createInitialBoard();
-    expect(board[7][7]).toEqual({ type: 'KA', player: 'sente' });
+    expect(board[7][7]).toEqual({ type: 'HI', player: 'sente' });
   });
 });
 

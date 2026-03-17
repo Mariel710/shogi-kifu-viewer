@@ -1,4 +1,5 @@
 import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
@@ -21,6 +22,9 @@ export default function TabLayout() {
         options={{
           title: '棋譜再生',
           tabBarLabel: '棋譜再生',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="play-circle-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -28,6 +32,9 @@ export default function TabLayout() {
         options={{
           title: 'ライブラリ',
           tabBarLabel: 'ライブラリ',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="albums-outline" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>

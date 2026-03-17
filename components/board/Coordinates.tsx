@@ -16,7 +16,7 @@ export default function Coordinates({ squareSize, reversed = false }: Coordinate
   return (
     <>
       {/* File numbers along the top (9→1 or 1→9 when reversed) */}
-      <View style={[styles.fileRow, { height: coordSize, marginLeft: coordSize }]}>
+      <View style={[styles.fileRow, { height: coordSize }]}>
         {files.map((label) => (
           <View key={label} style={{ width: squareSize, alignItems: 'center' }}>
             <Text style={[styles.coordText, { fontSize }]}>{label}</Text>

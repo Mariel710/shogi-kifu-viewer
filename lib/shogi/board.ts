@@ -22,8 +22,8 @@ export function createInitialBoard(): BoardState {
     { type: 'KY', player: 'gote' },
   ];
   board[0] = goteBackRow;
-  board[1][1] = { type: 'KA', player: 'gote' };
-  board[1][7] = { type: 'HI', player: 'gote' };
+  board[1][1] = { type: 'HI', player: 'gote' }; // 8二に飛
+  board[1][7] = { type: 'KA', player: 'gote' }; // 2二に角
   for (let i = 0; i < 9; i++) {
     board[2][i] = { type: 'FU', player: 'gote' };
   }
@@ -32,8 +32,8 @@ export function createInitialBoard(): BoardState {
   for (let i = 0; i < 9; i++) {
     board[6][i] = { type: 'FU', player: 'sente' };
   }
-  board[7][1] = { type: 'HI', player: 'sente' };
-  board[7][7] = { type: 'KA', player: 'sente' };
+  board[7][1] = { type: 'KA', player: 'sente' }; // 8八に角
+  board[7][7] = { type: 'HI', player: 'sente' }; // 2八に飛
   const senteBackRow: (Piece | null)[] = [
     { type: 'KY', player: 'sente' },
     { type: 'KE', player: 'sente' },
