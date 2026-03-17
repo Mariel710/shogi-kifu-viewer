@@ -109,8 +109,12 @@ export default function MainScreen() {
       <SafeAreaView style={styles.safeArea} edges={['bottom', 'left', 'right']}>
         <GameInfoBar meta={meta} isLoaded={isLoaded} />
         <View style={styles.landscapeContainer}>
-          {/* Left: hands + board + controls */}
-          <View style={styles.landscapeBoardArea}>
+          {/* Left: hands + board + controls — ScrollView allows overflow on small screens */}
+          <ScrollView
+            style={styles.landscapeBoardScroll}
+            contentContainerStyle={styles.landscapeBoardArea}
+            showsVerticalScrollIndicator={false}
+          >
             {boardArea}
             <MoveDescription text={moveDescription} />
             {controls}
@@ -120,7 +124,7 @@ export default function MainScreen() {
               {shareBtn}
             </View>
             <CommentView comments={comments} />
-          </View>
+          </ScrollView>
           {/* Right: kifu list */}
           <View style={styles.landscapeSide}>
             {kifuSection}
@@ -177,9 +181,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
+  landscapeBoardScroll: {
+    // Takes natural width from content (board width); flex:1 sibling handles the rest
+    flexShrink: 0,
+  },
   landscapeBoardArea: {
     alignItems: 'center',
-    justifyContent: 'center',
     padding: 4,
   },
   landscapeSide: {
