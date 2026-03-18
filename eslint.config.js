@@ -2,6 +2,8 @@ const expoConfig = require('eslint-config-expo/flat');
 const securityPlugin = require('eslint-plugin-security');
 
 module.exports = [
+  // Ignore build output
+  { ignores: ['dist/**', 'node_modules/**'] },
   ...expoConfig,
   securityPlugin.configs.recommended,
   {

@@ -16,9 +16,11 @@ export default function ImportScreen() {
   const [tab, setTab] = useState<Tab>('sample');
 
   const handleLoad = (text: string, filename?: string) => {
-    loadKifu(text, filename);
-    // Navigate back after load attempt; error is shown via parseError in context
-    router.back();
+    const success = loadKifu(text, filename);
+    // Only navigate back on success; on failure stay and show parseError
+    if (success) {
+      router.back();
+    }
   };
 
   return (

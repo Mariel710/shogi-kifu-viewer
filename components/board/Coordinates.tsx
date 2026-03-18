@@ -18,14 +18,15 @@ export default function Coordinates({ squareSize, reversed = false }: Coordinate
       {/* File numbers along the top (9→1 or 1→9 when reversed) */}
       <View style={[styles.fileRow, { height: coordSize }]}>
         {files.map((label) => (
-          <View key={label} style={{ width: squareSize, alignItems: 'center' }}>
+          <View key={label} style={{ width: squareSize, height: coordSize, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={[styles.coordText, { fontSize }]}>{label}</Text>
           </View>
         ))}
       </View>
 
-      {/* Rank kanji along the right side (一→九 or 九→一 when reversed) */}
-      <View style={styles.rankColumn}>
+      {/* Rank kanji along the right side (一→九 or 九→一 when reversed)
+          top: coordSize aligns the first rank label with the first board row */}
+      <View style={[styles.rankColumn, { top: coordSize }]}>
         {ranks.map((label) => (
           <View key={label} style={{ height: squareSize, width: coordSize, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={[styles.coordText, { fontSize }]}>{label}</Text>

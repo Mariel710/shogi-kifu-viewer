@@ -44,7 +44,8 @@ export interface KifuPlayerControls {
   goToEnd: () => void;
   goTo: (move: number) => void;
   forkAndForward: (forkIndex: number) => void;
-  loadKifu: (text: string, filename?: string) => void;
+  /** Returns true on success, false on parse error (error message stored in parseError). */
+  loadKifu: (text: string, filename?: string) => boolean;
   getJkfJson: () => string | null;
 }
 
@@ -207,7 +208,7 @@ export function useKifuPlayer(): KifuPlayerState & KifuPlayerControls {
   );
 
   const loadKifu = useCallback(
-    (text: string, filename?: string) => {
+    (text: string, filename?: string): boolean => {
       try {
         const player = parseKifu(text, filename);
         playerRef.current = player;
@@ -216,11 +217,15 @@ export function useKifuPlayer(): KifuPlayerState & KifuPlayerControls {
           ...buildStateFromPlayer(player),
           parseError: null,
         }));
+        return true;
       } catch (err) {
+        const msg = err instanceof Error ? err.message : '棋譜の読み込みに失敗しました';
+        console.error('[loadKifu] parse error:', msg, err);
         setState((prev) => ({
           ...prev,
-          parseError: err instanceof Error ? err.message : '棋譜の読み込みに失敗しました',
+          parseError: msg,
         }));
+        return false;
       }
     },
     []

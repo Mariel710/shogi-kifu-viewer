@@ -23,7 +23,7 @@ export default function TabLayout() {
           title: '棋譜再生',
           tabBarLabel: '棋譜再生',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="play-circle-outline" size={size} color={color} />
+            <Ionicons name="grid-outline" size={size} color={color} />
           ),
         }}
       />
@@ -33,7 +33,7 @@ export default function TabLayout() {
           title: 'ライブラリ',
           tabBarLabel: 'ライブラリ',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="albums-outline" size={size} color={color} />
+            <Ionicons name="library-outline" size={size} color={color} />
           ),
         }}
       />
