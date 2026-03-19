@@ -35,7 +35,12 @@ export default function ImportScreen() {
       {/* Content */}
       <View style={styles.content}>
         {tab === 'sample' && (
-          <SampleKifuList onSelect={(text, filename) => handleLoad(text, filename)} />
+          <>
+            <SampleKifuList onSelect={(text, filename) => handleLoad(text, filename)} />
+            {parseError ? (
+              <Text style={styles.errorText}>{parseError}</Text>
+            ) : null}
+          </>
         )}
         {tab === 'text' && (
           <TextImport onLoad={(text) => handleLoad(text)} error={parseError} />
@@ -107,5 +112,11 @@ const styles = StyleSheet.create({
   cancelText: {
     color: COLORS.primary,
     fontSize: 15,
+  },
+  errorText: {
+    color: '#C62828',
+    fontSize: 13,
+    paddingHorizontal: 16,
+    paddingTop: 8,
   },
 });

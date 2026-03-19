@@ -50,7 +50,7 @@ export default function ShogiBoard({
   return (
     <View style={{ width: size, height: size + coordSize }}>
       {/* Coordinate labels */}
-      <Coordinates squareSize={squareSize} reversed={reversed} />
+      <Coordinates squareSize={squareSize} coordSize={coordSize} reversed={reversed} />
 
       {/* Board grid — offset by coordSize to leave room for rank labels on right */}
       <View

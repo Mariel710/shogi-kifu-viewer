@@ -85,8 +85,8 @@ export default function KifuList({ moves, currentMove, onGoTo }: KifuListProps) 
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignSelf: 'stretch',
-    maxHeight: 220,
     borderTopWidth: 1,
     borderTopColor: COLORS.boardLine,
     backgroundColor: '#FAFAF5',

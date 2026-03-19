@@ -27,7 +27,7 @@ export function useScreenLayout(): ScreenLayoutInfo {
 
   let boardSize: number;
   if (layout === 'portrait') {
-    boardSize = width - 8;
+    boardSize = Math.min(width * 0.85, height * 0.44);
     if (Platform.OS === 'web') boardSize = Math.min(boardSize, WEB_MAX_BOARD);
   } else if (layout === 'landscape') {
     boardSize = height - 8;

@@ -3,12 +3,12 @@ import { FILE_LABELS, RANK_LABELS } from '@/lib/shogi/constants';
 
 interface CoordinatesProps {
   squareSize: number;
+  coordSize: number; // passed from ShogiBoard to ensure perfect alignment
   reversed?: boolean; // true = gote perspective (board flipped)
 }
 
-export default function Coordinates({ squareSize, reversed = false }: CoordinatesProps) {
+export default function Coordinates({ squareSize, coordSize, reversed = false }: CoordinatesProps) {
   const fontSize = squareSize * 0.38;
-  const coordSize = squareSize * 0.55;
 
   const files = reversed ? [...FILE_LABELS].reverse() : FILE_LABELS;
   const ranks = reversed ? [...RANK_LABELS].reverse() : RANK_LABELS;

@@ -210,6 +210,7 @@ export function useKifuPlayer(): KifuPlayerState & KifuPlayerControls {
   const loadKifu = useCallback(
     (text: string, filename?: string): boolean => {
       try {
+        console.log('[loadKifu] text:', text.slice(0, 120), 'filename:', filename);
         const player = parseKifu(text, filename);
         playerRef.current = player;
         setState((prev) => ({

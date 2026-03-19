@@ -61,7 +61,6 @@ export default function MainScreen() {
       onBack={goBack}
       onForward={goForward}
       onEnd={goToEnd}
-      onGoTo={goTo}
       isLoaded={isLoaded}
     />
   );
@@ -134,25 +133,40 @@ export default function MainScreen() {
     );
   }
 
-  // Portrait layout
+  // Portrait layout — no ScrollView; all elements fit within screen height
   return (
     <SafeAreaView style={styles.safeArea} edges={['bottom']}>
       <GameInfoBar meta={meta} isLoaded={isLoaded} />
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.portraitContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {boardArea}
-        <MoveDescription text={moveDescription} />
-        {controls}
-        <View style={styles.actionRow}>
+      <View style={styles.portraitContainer}>
+        {/* 後手持駒 */}
+        <Hand player={reversed ? 'sente' : 'gote'} pieces={gotePieces} pieceSize={boardSize / 9} />
+
+        {/* 将棋盤 */}
+        <GestureDetector gesture={swipeGesture}>
+          <View style={styles.boardWrapper}>
+            <ShogiBoard board={board} size={boardSize} lastMove={lastMove} reversed={reversed} />
+          </View>
+        </GestureDetector>
+
+        {/* 先手持駒 */}
+        <Hand player={reversed ? 'gote' : 'sente'} pieces={sentePieces} pieceSize={boardSize / 9} />
+
+        {/* 手数表示 + 操作ボタン類を1行に統合 */}
+        <View style={styles.descActionRow}>
+          <Text style={styles.moveDescText} numberOfLines={1}>{moveDescription}</Text>
           {importBtn}
           {flipBtn}
         </View>
-        <CommentView comments={comments} />
-        {kifuSection}
-      </ScrollView>
+
+        {/* ナビゲーションボタン */}
+        {controls}
+
+        {/* 棋譜リスト — 残りスペースを全て使用 */}
+        <View style={styles.kifuListArea}>
+          <BranchIndicator branches={branchMoves} onSelectBranch={forkAndForward} />
+          <KifuList moves={kifuList} currentMove={currentMove} onGoTo={goTo} />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -170,19 +184,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.bgMain,
   },
-  scroll: {
+  portraitContainer: {
     flex: 1,
-  },
-  portraitContent: {
     alignItems: 'center',
-    paddingBottom: 16,
+  },
+  boardWrapper: {
+    // No extra style needed — board controls its own size
+  },
+  descActionRow: {
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#F0EAD6',
+    gap: 6,
+  },
+  moveDescText: {
+    flex: 1,
+    fontSize: 14,
+    color: COLORS.textMain,
+    fontWeight: '500',
+  },
+  kifuListArea: {
+    flex: 1,
+    alignSelf: 'stretch',
+    overflow: 'hidden',
   },
   landscapeContainer: {
     flex: 1,
     flexDirection: 'row',
   },
   landscapeBoardScroll: {
-    // Takes natural width from content (board width); flex:1 sibling handles the rest
     flexShrink: 0,
   },
   landscapeBoardArea: {
@@ -201,12 +234,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: '#F0EAD6',
   },
-  moveDescText: {
-    fontSize: 15,
-    color: COLORS.textMain,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
   actionRow: {
     flexDirection: 'row',
     alignSelf: 'stretch',
@@ -216,22 +243,22 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   importBtn: {
-    flex: 1,
-    height: 40,
+    height: 32,
+    paddingHorizontal: 10,
     backgroundColor: '#8B6914',
-    borderRadius: 8,
+    borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },
   importBtnText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
   },
   flipBtn: {
-    height: 40,
-    paddingHorizontal: 14,
-    borderRadius: 8,
+    height: 32,
+    paddingHorizontal: 10,
+    borderRadius: 6,
     borderWidth: 1.5,
     borderColor: COLORS.primary,
     alignItems: 'center',
@@ -241,7 +268,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
   },
   flipBtnText: {
-    fontSize: 13,
+    fontSize: 12,
     color: COLORS.primary,
     fontWeight: '600',
   },

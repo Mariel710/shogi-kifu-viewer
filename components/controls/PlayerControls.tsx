@@ -3,11 +3,8 @@ import {
   View,
   Text,
   Pressable,
-  TouchableOpacity,
   StyleSheet,
   Platform,
-  type GestureResponderEvent,
-  type LayoutChangeEvent,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { COLORS } from '@/lib/shogi/constants';
@@ -19,7 +16,6 @@ interface PlayerControlsProps {
   onBack: () => void;
   onForward: () => void;
   onEnd: () => void;
-  onGoTo: (move: number) => void;
   isLoaded: boolean;
 }
 
@@ -36,25 +32,9 @@ export default function PlayerControls({
   onBack,
   onForward,
   onEnd,
-  onGoTo,
   isLoaded,
 }: PlayerControlsProps) {
-  const barWidthRef = useRef<number>(0);
   const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const handleBarLayout = useCallback((e: LayoutChangeEvent) => {
-    barWidthRef.current = e.nativeEvent.layout.width;
-  }, []);
-
-  const handleBarPress = useCallback(
-    (e: GestureResponderEvent) => {
-      if (!isLoaded || totalMoves === 0 || barWidthRef.current === 0) return;
-      const tapX = e.nativeEvent.locationX;
-      const move = Math.round((tapX / barWidthRef.current) * totalMoves);
-      onGoTo(Math.max(0, Math.min(move, totalMoves)));
-    },
-    [isLoaded, totalMoves, onGoTo]
-  );
 
   const startAutoplay = useCallback(() => {
     if (!isLoaded || autoplayRef.current) return;
@@ -79,22 +59,10 @@ export default function PlayerControls({
     [isLoaded]
   );
 
-  const progress = totalMoves > 0 ? currentMove / totalMoves : 0;
   const opacity = isLoaded ? 1 : 0.4;
 
   return (
     <View style={styles.container}>
-      {/* Progress bar — tap to seek */}
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onLayout={handleBarLayout}
-        onPress={handleBarPress}
-        style={styles.barTrack}
-      >
-        <View style={[styles.barFilled, { flex: progress }]} />
-        <View style={[styles.barEmpty, { flex: 1 - progress }]} />
-      </TouchableOpacity>
-
       {/* Move counter */}
       <Text style={styles.counter}>
         {currentMove} / {totalMoves} 手
@@ -138,22 +106,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: COLORS.bgMain,
     paddingHorizontal: 8,
-    paddingBottom: 8,
-  },
-  barTrack: {
-    flexDirection: 'row',
-    height: 8,
-    borderRadius: 4,
-    overflow: 'hidden',
-    backgroundColor: '#E0D8C8',
-    marginTop: 8,
-    marginBottom: 4,
-  },
-  barFilled: {
-    backgroundColor: COLORS.primary,
-  },
-  barEmpty: {
-    backgroundColor: 'transparent',
+    paddingVertical: 6,
   },
   counter: {
     textAlign: 'center',
