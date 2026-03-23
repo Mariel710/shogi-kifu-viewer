@@ -48,18 +48,17 @@ export default function ShogiBoard({
     : [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
   return (
-    <View style={{ width: size, height: size + coordSize }}>
+    <View style={{ width: size, height: size }}>
       {/* Coordinate labels */}
       <Coordinates squareSize={squareSize} coordSize={coordSize} reversed={reversed} />
 
-      {/* Board grid — offset by coordSize to leave room for rank labels on right */}
+      {/* Board grid — Coordinates' fileRow already provides the coordSize vertical offset */}
       <View
         style={[
           styles.board,
           {
             width: squareSize * 9,
             height: squareSize * 9,
-            marginTop: coordSize,
             borderTopWidth: 1,
             borderLeftWidth: 1,
             borderColor: COLORS.boardLine,
@@ -73,7 +72,7 @@ export default function ShogiBoard({
               return (
                 <Square key={col} size={squareSize} highlight={getHighlight(row, col)}>
                   {piece && (
-                    <Piece type={piece.type} player={piece.player} size={squareSize} />
+                    <Piece type={piece.type} player={piece.player} size={squareSize} reversed={reversed} />
                   )}
                 </Square>
               );

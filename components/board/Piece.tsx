@@ -9,12 +9,18 @@ interface PieceProps {
   type: PieceType;
   player: Player;
   size: number; // square size in px — font scales relative to this
+  reversed?: boolean; // true = board shown from gote's perspective
 }
 
-export default function Piece({ type, player, size }: PieceProps) {
+export default function Piece({ type, player, size, reversed = false }: PieceProps) {
   const isGote = player === 'gote';
   const isPromoted = PROMOTED_TYPES.has(type);
   const fontSize = size * 0.62;
+
+  // Rotate when piece faces "away" from the viewer:
+  //   Normal view (reversed=false): gote pieces are rotated
+  //   Gote view  (reversed=true):  sente pieces are rotated
+  const shouldRotate = isGote !== reversed;
 
   return (
     <Text
@@ -22,7 +28,7 @@ export default function Piece({ type, player, size }: PieceProps) {
         styles.text,
         { fontSize },
         isPromoted && styles.promoted,
-        isGote && styles.rotated,
+        shouldRotate && styles.rotated,
       ]}
       allowFontScaling={false}
       numberOfLines={1}
@@ -37,7 +43,7 @@ const styles = StyleSheet.create({
     color: COLORS.pieceSente,
     fontWeight: 'bold',
     textAlign: 'center',
-    lineHeight: undefined, // let font size drive the height
+    lineHeight: undefined,
   },
   promoted: {
     color: '#C62828',
