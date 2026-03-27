@@ -1,42 +1,36 @@
-# 棋譜ビューア (Shogi Kifu Viewer)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-将棋の棋譜並べアプリ。KIF・KI2・CSA・SFEN 等の主要な棋譜形式を読み込み、スマホでもPCでも快適に1手ずつ再生できます。
+## Getting Started
 
-## プラットフォーム
-- iOS (App Store)
-- Android (Google Play)
-- Web (ブラウザ版)
-
-## 開発環境のセットアップ
+First, run the development server:
 
 ```bash
-npm install
-npx expo start
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## 対応棋譜形式
-- KIF (.kif / .kifu) — 柿木形式
-- KI2 (.ki2) — 柿木簡易形式
-- CSA (.csa) — コンピュータ将棋協会形式
-- SFEN/USI — Universal Shogi Interface形式
-- JKF (.json) — JSON棋譜フォーマット
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## 技術スタック
-- [Expo](https://expo.dev/) SDK 54+ (React Native)
-- [expo-router](https://expo.github.io/router/) — ファイルベースルーティング
-- [NativeWind](https://www.nativewind.dev/) v4 — Tailwind CSS for React Native
-- [json-kifu-format](https://github.com/na2hiro/json-kifu-format) — 棋譜パーサー
-- [expo-sqlite](https://docs.expo.dev/versions/latest/sdk/sqlite/) — ローカル保存
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## ビルド・デプロイ
-```bash
-# EAS Build
-eas build --platform ios
-eas build --platform android
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-# Web
-npx expo export --platform web
-```
+## Learn More
 
-## ライセンス
-MIT
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
